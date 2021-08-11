@@ -1,0 +1,37 @@
+# Deployment for the client-service
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-app
+  labels:
+    app: test-app
+spec:
+  selector:
+    matchLabels:
+      app: test-pod
+  template:
+    metadata:
+      name: test-pod
+      labels:
+        app: test-pod
+    spec:
+      containers:
+        - name: test-container
+          image: gcr.io/PROJECT_ID/IMAGE:TAG
+          ports:
+            - containerPort: 3000
+              name: test-c-port
+---
+# auth-service
+apiVersion: v1
+kind: Service
+metadata:
+  name: test-service
+  labels:
+    app: test-service
+spec:
+  ports:
+    - port: 80
+      targetPort: 3000
+  selector:
+    app: test-pod
